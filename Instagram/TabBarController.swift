@@ -5,6 +5,7 @@
 //  Created by stma2019 on 2021/06/20.
 //
 
+import Firebase
 import UIKit
 
 class TabBarController: UITabBarController, UITabBarControllerDelegate {
@@ -30,6 +31,16 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
         } else {
             // その他のViewControllerは通常のタブの切り替えを実施
             return true
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        // currentUserがnilならログインしていない
+        if Auth.auth().currentUser == nil {
+            let loginViewController = self.storyboard?.instantiateViewController(withIdentifier: "Login")
+            self.present(loginViewController!, animated: true, completion: nil)
         }
     }
     
