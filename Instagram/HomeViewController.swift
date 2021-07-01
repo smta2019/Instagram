@@ -14,9 +14,12 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // 投稿データを格納する配列
     var postArray: [PostData] = []
+    var commentArray: [CommentData] = []
     
     // Firestoreのリスナー
-    var listener: ListenerRegistration?
+    var listener1: ListenerRegistration?
+    var listener2: ListenerRegistration?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +27,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         // Do any additional setup after loading the view.
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.rowHeight = UITableView.automaticDimension
         
         // カスタムセルを登録する
         let nib = UINib(nibName: "PostTableViewCell", bundle: nil)
@@ -36,20 +40,36 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         // ログイン済みか確認
         if Auth.auth().currentUser != nil {
             let postsRef = Firestore.firestore().collection(Const.PostPath).order(by: "date", descending: true)
-            listener = postsRef.addSnapshotListener() { (querySnapshot, error) in
+            let commentsRef = Firestore.firestore().collection(Const.CommentPath)
+            listener1 = postsRef.addSnapshotListener() { (querySnapshot, error) in
                 if let error = error {
-                    print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
+                    print("DEBUG_PRINT: Postのsnapshotの取得が失敗しました。 \(error)")
                     return
                 }
                 // 取得したdocumentをもとにPostDataを作成し、postArrayの配列にする。
                 self.postArray = querySnapshot!.documents.map { document in
-                    print("DEBUG_PRINT: document取得 \(document.documentID)")
+                    print("DEBUG_PRINT: Postのdocument取得 \(document.documentID)")
                     let postData = PostData(document: document)
                     return postData
                 }
                 // TableViewの表示を更新する
                 self.tableView.reloadData()
             }
+            listener2 = commentsRef.addSnapshotListener() { (querySnapshot, error) in
+                if let error = error {
+                    print("DEBUG_PRINT: Commentのsnapshotの取得が失敗しました。 \(error)")
+                    return
+                }
+                // 取得したdocumentをもとにCommentDataを作成し、commentArrayの配列にする。
+                self.commentArray = querySnapshot!.documents.map { document in
+                    print("DEBUG_PRINT: Commentのdocument取得 \(document.documentID)")
+                    let commentData = CommentData(document: document)
+                    return commentData
+                }
+                // TableViewの表示を更新する
+                self.tableView.reloadData()
+            }
+
         }
     }
     
@@ -57,7 +77,8 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         super.viewWillDisappear(animated)
         print("DEBUG_PRINT: viewWillDisappear")
         // listenerを削除して監視を停止する
-        listener?.remove()
+        listener1?.remove()
+        listener2?.remove()
     }
         
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -67,8 +88,20 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! PostTableViewCell
         cell.setPostData(postArray[indexPath.row])
+        cell.clearComment()
+        var filteredCommentData: [CommentData] = []
+        filteredCommentData = self.commentArray.filter( {$0.postId == self.postArray[indexPath.row].id})
+            if filteredCommentData.isEmpty == false {
+                var i = 0
+                while i < filteredCommentData.count {
+                    cell.setCommentData(filteredCommentData[i])
+                    i += 1
+                }
+            }
         
         cell.likeButton.addTarget(self, action: #selector(handleButton(_:forEvent:)), for: .touchUpInside)
+        
+        cell.commentButton.addTarget(self, action: #selector(handleCommentButton(_:forEvent:)), for: .touchUpInside)
         
         return cell
     }
@@ -98,6 +131,23 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             let postRef = Firestore.firestore().collection(Const.PostPath).document(postData.id)
             postRef.updateData(["likes": updateValue])
         }
+    }
+    
+    @objc func handleCommentButton(_ sender: UIButton, forEvent event: UIEvent) {
+        print("DEBUG_PRINT: コメントボタンがタップされました。")
+        
+        // タップされたセルのインデックスを求める
+        let touch = event.allTouches?.first
+        let point = touch!.location(in: self.tableView)
+        let indexPath = tableView.indexPathForRow(at: point)
+        
+        // 配列からタップされたインデックスのデータを取り出す
+        let postData = postArray[indexPath!.row]
+        
+        let commentViewController = storyboard!.instantiateViewController(withIdentifier: "Comment") as! CommentViewController
+        commentViewController.postId = postData.id
+        present(commentViewController, animated: true)
+        
     }
     /*
     // MARK: - Navigation

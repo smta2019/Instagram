@@ -15,6 +15,11 @@ class PostTableViewCell: UITableViewCell {
     @IBOutlet weak var likeLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var captionLabel: UILabel!
+    @IBOutlet weak var commentButton: UIButton!
+    @IBOutlet weak var commentLabel: UILabel!
+    
+    var commentViewDelegate: CommentViewController? = nil
+    var numberOfLines: Int = 0
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -58,5 +63,16 @@ class PostTableViewCell: UITableViewCell {
             let buttonImage = UIImage(named: "like_none")
             self.likeButton.setImage(buttonImage, for: .normal)
         }
+    }
+    
+    func clearComment() {
+        if commentLabel.text != "" {
+            commentLabel.text = ""
+        }
+    }
+    
+    func setCommentData(_ filteredData: CommentData) {
+        commentLabel.text! = "\(commentLabel.text!)\n\(filteredData.name!) : \(filteredData.comment!)"
+        print(commentLabel.text)
     }
 }

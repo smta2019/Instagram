@@ -3,6 +3,7 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -84,7 +85,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wvk-0K-B4S" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-396" y="1558"/>
+            <point key="canvasLocation" x="-804" y="1558"/>
         </scene>
         <!--ホーム-->
         <scene sceneID="dW9-39-2H6">
@@ -235,7 +236,71 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AQc-46-v41" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="591" y="1558"/>
+            <point key="canvasLocation" x="19" y="1558"/>
+        </scene>
+        <!--Comment View Controller-->
+        <scene sceneID="x09-wR-wp7">
+            <objects>
+                <viewController storyboardIdentifier="Comment" id="cfm-5l-qEj" customClass="CommentViewController" customModule="Instagram" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="S0d-5e-esG">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" ambiguous="YES" keyboardDismissMode="onDrag" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="ddk-yn-yS3">
+                                <rect key="frame" x="57" y="94" width="300" height="120"/>
+                                <color key="backgroundColor" systemColor="systemOrangeColor"/>
+                                <color key="tintColor" name="AccentColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="120" id="2nO-2q-T42"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="300" id="QzS-xe-M8X"/>
+                                </constraints>
+                                <color key="textColor" systemColor="labelColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UJ1-6W-37m">
+                                <rect key="frame" x="57" y="234" width="300" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="B1Z-3W-HKe"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="300" id="hkR-8T-Zw1"/>
+                                </constraints>
+                                <state key="normal" title="コメントを投稿する" backgroundImage="btn"/>
+                                <connections>
+                                    <action selector="handlePostCommentButton:" destination="cfm-5l-qEj" eventType="touchUpInside" id="HVx-c6-hrs"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rz9-E5-cgh">
+                                <rect key="frame" x="57" y="284" width="300" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="5oZ-iZ-R06"/>
+                                    <constraint firstAttribute="height" constant="40" id="h6B-o7-gJH"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="300" id="z3z-en-DHG"/>
+                                </constraints>
+                                <state key="normal" title="キャンセル" backgroundImage="btn"/>
+                                <connections>
+                                    <action selector="handleCancelButton:" destination="cfm-5l-qEj" eventType="touchUpInside" id="srr-HT-Q2G"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="EIr-Za-SIB"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="UJ1-6W-37m" firstAttribute="top" secondItem="ddk-yn-yS3" secondAttribute="bottom" constant="20" id="eT9-xj-Po5"/>
+                            <constraint firstItem="ddk-yn-yS3" firstAttribute="centerX" secondItem="S0d-5e-esG" secondAttribute="centerX" id="iwx-dZ-gsp"/>
+                            <constraint firstItem="rz9-E5-cgh" firstAttribute="centerX" secondItem="S0d-5e-esG" secondAttribute="centerX" id="kJS-ST-fqr"/>
+                            <constraint firstItem="rz9-E5-cgh" firstAttribute="top" secondItem="UJ1-6W-37m" secondAttribute="bottom" constant="10" id="nD1-hh-vE3"/>
+                            <constraint firstItem="ddk-yn-yS3" firstAttribute="top" secondItem="EIr-Za-SIB" secondAttribute="top" constant="50" id="pa0-eH-uEU"/>
+                            <constraint firstItem="UJ1-6W-37m" firstAttribute="centerX" secondItem="S0d-5e-esG" secondAttribute="centerX" id="sIb-ye-FuZ"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="IKq-XP-C53"/>
+                    <connections>
+                        <outlet property="commentTextView" destination="ddk-yn-yS3" id="tEt-7j-hMa"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="R5h-ZT-2W3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="874" y="1558"/>
         </scene>
         <!--設定-->
         <scene sceneID="4Tz-Sa-LHq">
@@ -320,8 +385,17 @@
         <image name="camera" width="25" height="25"/>
         <image name="home" width="25" height="25"/>
         <image name="setting" width="25" height="25"/>
+        <namedColor name="AccentColor">
+            <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemOrangeColor">
+            <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
