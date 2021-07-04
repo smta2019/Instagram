@@ -91,11 +91,13 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.clearComment()
         var filteredCommentData: [CommentData] = []
         filteredCommentData = self.commentArray.filter( {$0.postId == self.postArray[indexPath.row].id})
+        print("filteredCommentData: \(filteredCommentData)")
             if filteredCommentData.isEmpty == false {
                 var i = 0
                 while i < filteredCommentData.count {
                     cell.setCommentData(filteredCommentData[i])
                     i += 1
+                    print("DEBUG_PRINT：　\(cell.commentLabel.text!)")
                 }
             }
         

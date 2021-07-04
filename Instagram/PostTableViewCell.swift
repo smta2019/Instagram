@@ -18,6 +18,8 @@ class PostTableViewCell: UITableViewCell {
     @IBOutlet weak var commentButton: UIButton!
     @IBOutlet weak var commentLabel: UILabel!
     
+    
+    
     var commentViewDelegate: CommentViewController? = nil
     var numberOfLines: Int = 0
     
@@ -70,9 +72,10 @@ class PostTableViewCell: UITableViewCell {
             commentLabel.text = ""
         }
     }
-    
+
     func setCommentData(_ filteredData: CommentData) {
-        commentLabel.text! = "\(commentLabel.text!)\n\(filteredData.name!) : \(filteredData.comment!)"
-        print(commentLabel.text)
+        commentLabel.text = "\(commentLabel.text!)\n\(filteredData.name!) : \(filteredData.comment!)"
+        print("DEBUG_PRINT: \(filteredData.name!)")
+        print("DEBUG_PRINT: \(commentLabel.text!)")
     }
 }
